@@ -5,15 +5,15 @@ import localCache from '../lib/local-cache';
 import Logger from '../utils/logger';
 require('dotenv').config();
 
-const isTest = process.env.NODE_ENV === 'test';
-const dbName = isTest ? (process.env.TEST_DB_NAME as string) : (process.env.DB_NAME as string);  
+const isProduction = process.env.NODE_ENV === 'production';
+const dbName = process.env.DB_NAME as string;  
 const dbUser = process.env.DB_USER as string;
 const dbHost = process.env.DB_HOST;
 const dbDriver = process.env.DB_DRIVER as Dialect;
 const dbPassword = process.env.DB_PASSWORD;
 
 let dialectOptions;
-if (isTest) {
+if (isProduction) {
   dialectOptions = {
       ssl: {
         require: true,
