@@ -1,0 +1,61 @@
+version: "3.8"
+networks:
+  msnetwork:
+    ipam:
+      driver: default
+      config:
+        - subnet: 172.23.0.0/24
+services:
+  db:
+    container_name: db-online-booking
+    restart: unless-stopped
+    image: 'postgres:alpine'
+    ports:
+      - '5432:5432'
+    environment:
+      - POSTGRES_USER=root
+      - POSTGRES_PASSWORD=12345
+      - POSTGRES_DB=wellness_event
+    volumes:
+      - pgwellness:/var/lib/postgresql/data
+    networks:
+      msnetwork:
+        ipv4_address: 172.23.0.2
+  app:
+    container_name: api-online-booking
+    build: 
+      context: ./
+      dockerfile: ./Dockerfile
+    restart: unless-stopped
+    tty: true
+    ports:
+      - 3000:3000
+    volumes:
+      - ./:/home/apiOnlineBooking
+    environment:
+      - PGUSER=root
+      - PGPASSWORD=12345
+      - PGDATABASE=wellness_event
+      - PGHOST=db
+    depends_on: 
+      - db
+    networks:
+      msnetwork:
+        ipv4_address: 172.23.0.3
+  nginx-proxy:
+    container_name: api-proxy
+    restart: unless-stopped
+    build:
+      dockerfile: Dockerfile
+      context: ./proxy
+    depends_on:
+      - app
+      - db
+    ports:
+      - "80:80"
+      - "443:443"
+    networks:
+      msnetwork:
+        ipv4_address: 172.23.0.4
+volumes:
+  pgwellness: {}

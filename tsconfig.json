@@ -1,0 +1,24 @@
+{
+  "compilerOptions": {
+    "experimentalDecorators": true,
+    "allowSyntheticDefaultImports": true,
+    "target": "es6",  
+    "module": "commonjs",
+    "rootDir": "",
+    "baseUrl": ".",
+    "esModuleInterop": true,     
+    "forceConsistentCasingInFileNames": true,  
+    "resolveJsonModule": true,
+    "strict": true,    
+    "skipLibCheck": true,
+    "outDir": "dist",
+    "moduleResolution": "node",
+    "paths": {
+      "@models/*": ["/src/database/models/*"],
+      "@repository/*": ["/src/database/repository/*"],
+    }
+  },
+  "lib": ["es6"],
+  "include": ["src/**/*"],
+  "exclude": ["node_modules"]
+}
