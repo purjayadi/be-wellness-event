@@ -58,7 +58,7 @@ class BookingRepository {
     }
 
     async FindById(id: string): Promise<BookingOutput> {
-        const booking = await Booking.findByPk(id);
+        const booking = await Booking.scope(['event', 'hr']).findByPk(id);
         if (!booking) {
             // throw custom error
             throw new Error('not found');
