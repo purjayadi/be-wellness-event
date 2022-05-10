@@ -4,7 +4,7 @@ import { IEvent } from '../interfaces';
 import { EventService } from '../services';
 import { getAllDataFilters } from '../dto';
 import { paginate } from '../utils/paginate';
-import { auth } from '../utils/auth';
+import { isVendor, auth } from '../utils/auth';
 
 const Event = (app: any) => {
     const service = new EventService();
@@ -27,7 +27,7 @@ const Event = (app: any) => {
         }
     });
 
-    app.post('/event', auth, async (req: Request, res: Response) => {
+    app.post('/event', auth, isVendor, async (req: Request, res: Response) => {
         const payload: IEvent = req.body;
         // @ts-ignore
         const user: IUser = req.user;
@@ -45,7 +45,7 @@ const Event = (app: any) => {
         }
     });
 
-    app.patch('/event/:id', auth, async (req: Request, res: Response) => {
+    app.patch('/event/:id', auth, isVendor, async (req: Request, res: Response) => {
         const Event: IEvent = req.body;
         try {
             await service.UpdateEvent(req.params.id, Event);
@@ -61,7 +61,7 @@ const Event = (app: any) => {
         }
     });
 
-    app.delete('/event/:id', auth, async (req: Request, res: Response) => {
+    app.delete('/event/:id', auth, isVendor, async (req: Request, res: Response) => {
         try {
             await service.DeleteEvent(req.params.id);
             return res.status(201).send({
